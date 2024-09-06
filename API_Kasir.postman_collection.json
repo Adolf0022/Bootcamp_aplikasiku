@@ -1,0 +1,852 @@
+{
+	"info": {
+		"_postman_id": "9ea1107c-e68e-41e3-abc2-c897fc526460",
+		"name": "API_Kasir",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21784175",
+		"_collection_link": "https://www.postman.com/warped-eclipse-87078/workspace/bootcamp-test-aplikasiku/collection/21784175-9ea1107c-e68e-41e3-abc2-c897fc526460?action=share&source=collection_link&creator=21784175"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Registrasi Berhasil",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verifikasi message \", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"Toko berhasil didaftarkan\");\r",
+									"});\r",
+									"\r",
+									"let responseBody = pm.response.json();\r",
+									"let email = responseBody.data.email;\r",
+									"pm.collectionVariables.set(\"email\", email);\r",
+									"\r",
+									"\r",
+									"let name  = responseBody.data.name;\r",
+									"pm.collectionVariables.set(\"name\", name);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"{{$randomFirstName}}\",\r\n   \"email\": \"{{$randomEmail}}\",\r\n   \"password\": \"Semangat45!\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/registration",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verifikasi message field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"Authentication berhasil ditambahkan\");\r",
+									"});\r",
+									"\r",
+									"let responseBody = pm.response.json();\r",
+									"let token = responseBody.data.accessToken;\r",
+									"pm.collectionVariables.set(\"token\", token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\": \"{{email}}\",\r\n   \"password\": \"Semangat45!\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/authentications",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"authentications"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Add Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validasi Response Code/status\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(201);\r",
+									"});\r",
+									"// Validasi Status yang di tampilkan\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+									"});\r",
+									"// Validasi message yang ditampilkan\r",
+									"pm.test(\"Verifikasi message field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"Category berhasil ditambahkan\");\r",
+									"});\r",
+									"\r",
+									"// Ambil category id \r",
+									"let responseBody = pm.response.json();\r",
+									"let categoryId = responseBody.data.categoryId;\r",
+									"pm.collectionVariables.set(\"categoryId\", categoryId);\r",
+									"\r",
+									"let nama_barang = responseBody.data.name;\r",
+									"pm.collectionVariables.set(\"nama_barang\", nama_barang);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"Kerupuk Tenggiri {{$randomCity}}\",\r\n   \"description\": \"Cemilan UMKM\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/categories",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Validasi Status yang di tampilkan\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									"// Verifikasi nama barang yang di tampilkan sesuai \r",
+									"let req_nama_barang = pm.globals.get(\"nama_barang\");\r",
+									"let respons_nama_barang = pm.response.json(); \r",
+									"pm.test(\"Verify that the name in the request matches the name in the response\", function () {\r",
+									"      pm.expect(req_nama_barang).to.eql(respons_nama_barang.data.name);\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{link}}/categories/{{categoryId}}",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"categories",
+								"{{categoryId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Validasi Status yang di tampilkan\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"Kerupuk Ikan {{$randomColor}}\",\r\n   \"description\": \"Update nama Produk\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/categories/{{categoryId}}",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"categories",
+								"{{categoryId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Validasi Status yang di tampilkan\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/categories/{{categoryId}}",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"categories",
+								"{{categoryId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Add New Customers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validasi status code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Validasi status yang tampil\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									"// Validasi message yang tampil\r",
+									"pm.test(\"Verifikasi status message\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"Customer berhasil ditambahkan\");\r",
+									"});\r",
+									"\r",
+									"// ambil customer id menjadi variable\r",
+									"let responseBody = pm.response.json();\r",
+									"let customerId = responseBody.data.customerId;\r",
+									"pm.collectionVariables.set(\"customerId\", customerId);\r",
+									"\r",
+									"/// ambil nama customer jadi variabel\r",
+									"let nama_customer = responseBody.data.name;\r",
+									"pm.collectionVariables.set(\"nama_cust\", nama_customer )"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"{{$randomFullName}}\",\r\n   \"phone\": \"0812389777000\",\r\n   \"address\": \"{{$randomCity}}\",\r\n   \"description\": \"Customer Favorite Boss\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/customers",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gagal Add Customer Wrong Phone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validasi status code\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"// Validasi status yang tampil\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"fail\");\r",
+									"});\r",
+									"\r",
+									"// Validasi message yang tampil\r",
+									"pm.test(\"Verifikasi status message\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"\\\"phone\\\" must be a number\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"{{$randomFullName}}\",\r\n   \"phone\": \"AAAAAAAA\",\r\n   \"address\": \"{{$randomCity}}\",\r\n   \"description\": \"Customer Favorite Boss\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/customers",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gagal Add Customer Empty Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validasi status code\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"// Validasi status yang tampil\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"fail\");\r",
+									"});\r",
+									"\r",
+									"// Validasi message yang tampil\r",
+									"pm.test(\"Verifikasi status message\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"\\\"name\\\" is not allowed to be empty\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"\",\r\n   \"phone\": \"081399900000\",\r\n   \"address\": \"{{$randomCity}}\",\r\n   \"description\": \"Customer Favorite Boss\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/customers",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Validasi status yang tampil\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									"// Verifikasi nama customer yang di tampilkan sesuai \r",
+									"let req_nama_cust = pm.globals.get(\"nama_cust\");\r",
+									"let respons_nama_cust = pm.response.json(); \r",
+									"pm.test(\"Verify that the name in the request matches the name in the response\", function () {\r",
+									"      pm.expect(req_nama_cust).to.eql(respons_nama_cust.data.name);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{link}}/customers/{{customerId}}",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Customer Tidak Terdaftar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"// Validasi status yang tampil\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"fail\");\r",
+									"});\r",
+									"\r",
+									"// Validasi message yang tampil\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"id tidak valid\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{link}}/customers/0090",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"customers",
+								"0090"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer Info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Validasi Status yang di tampilkan\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"{{$randomFullName}}\",\r\n   \"phone\": \"08987654321\",\r\n   \"address\": \"{{$randomCity}}\",\r\n   \"description\": \"Customer Kesayangan BOS\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/customers/{{customerId}}",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update UnRegister Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"// Validasi Status yang di tampilkan\r",
+									"pm.test(\"Verifikasi status field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.eql(\"fail\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// Validasi Message yang di tampilkan\r",
+									"pm.test(\"Verifikasi message field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"id tidak valid\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"{{$randomFullName}}\",\r\n   \"phone\": \"08987654321\",\r\n   \"address\": \"{{$randomCity}}\",\r\n   \"description\": \"Customer Kesayangan BOS\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{link}}/customers/09990",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"customers",
+								"09990"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{link}}/customers/{{customerId}}",
+							"host": [
+								"{{link}}"
+							],
+							"path": [
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "link",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "name",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "categoryId",
+			"value": ""
+		},
+		{
+			"key": "nama_barang",
+			"value": ""
+		},
+		{
+			"key": "customerId",
+			"value": ""
+		},
+		{
+			"key": "nama_cust",
+			"value": ""
+		}
+	]
+}
