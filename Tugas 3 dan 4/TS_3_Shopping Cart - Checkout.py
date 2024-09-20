@@ -46,24 +46,29 @@ class Test_Add_Shooping_Cart_CO(unittest.TestCase):
         product_1b = driver.find_element(By.XPATH, "/html/body/div[4]/div[1]/div[4]/div/div/div[2]/div/form/table/tbody/tr/td[3]/a").text
         self.assertIn(product_1,product_1b) #Verify product in cart is available
         driver.find_element(By.CSS_SELECTOR, "[type='checkbox']").click() #check Product
-        driver.find_element(By.ID, "termsofservice").click # Check tearm and conditions
+        time.sleep(2)
+        driver.find_element(By.ID, "termsofservice").click() # Check tearm and conditions
+        time.sleep(2)
         driver.find_element(By.ID, "checkout").click() #click checkout button
         time.sleep(2)
         self.assertEqual(driver.current_url, "https://demowebshop.tricentis.com/onepagecheckout", "Did not navigate to the Check out page") # Verify that user directed to checkout page
         text_co = driver.find_element(By.XPATH, "/html/body/div[4]/div[1]/div[4]/div/div/div[1]/h1").text
         self.assertIn("Checkout", text_co)
-        driver.find_element(By.CLASS_NAME, "button-1 new-address-next-step-button").click() #click button continue using existing address
+        driver.find_element(By.XPATH, '//*[@id="billing-buttons-container"]/input').click() #click button continue using existing address
+        time.sleep(2)
+        driver.execute_script("window.scrollTo(50, document.body.scrollHeight);")
         driver.find_element(By.ID, "PickUpInStore").click() #Pick up in store
         time.sleep(1)
-        driver.find_element(By.CLASS_NAME, "button-1 new-address-next-step-button").click() #click button continue
+        driver.find_element(By.XPATH, '//*[@id="shipping-buttons-container"]/input').click() #click button continue
         time.sleep(1)
         driver.find_element(By.ID, "paymentmethod_3").click() #select Purchase Order
-        driver.find_element(By.CLASS_NAME, "button-1 new-address-next-step-button").click() #click button continue
+        driver.find_element(By.XPATH, '//*[@id="payment-method-buttons-container"]/input').click() #click button continue
         time.sleep(1)
         driver.find_element(By.ID,"PurchaseOrderNumber").send_keys("00045tyomrw") #Set po number
-        driver.find_element(By.CLASS_NAME, "button-1 new-address-next-step-button").click() #click button continue
+        driver.find_element(By.XPATH, '//*[@id="payment-info-buttons-container"]/input').click() #click button continue
         time.sleep(1)
-        driver.find_element(By.CLASS_NAME, "button-1 new-address-next-step-button").click() #click button continue
+        driver.find_element(By.XPATH, '//*[@id="confirm-order-buttons-container"]/input').click() #click button continue
+        time.sleep(5)
         self.assertEqual(driver.current_url, "https://demowebshop.tricentis.com/checkout/completed/", "Did not navigate to the Complete page") # Verify that user directed to completed page
         thankyou_text = driver.find_element(By.XPATH, "/html/body/div[4]/div[1]/div[4]/div/div/div[1]/h1") 
         time.sleep(5)
